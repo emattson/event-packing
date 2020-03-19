@@ -1,5 +1,5 @@
 # Event Packing 90 Min Takehome
-> Tester: Eli
+> Testee: Eli
 > date: 3/19/2020
 
 ## Setup 
