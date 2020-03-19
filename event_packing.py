@@ -60,25 +60,31 @@ iteratively improve the solution.
 '''
 
 import pytest
-
-def event_packer(meetings: [list]):
+from typing import List, Tuple, Set
+## 
+# input: list
+def event_packer(meetings: List[List[int]]) -> Tuple[List[List[int]], int]:
     picked_meetings = []
     # try packing from big meeting to small (eg the boulders to sand approach)
     meetings_desc = sorted(meetings, key= lambda meeting: len(meeting), reverse=True)
-    booked_users = set()
+    booked_users: Set[int] = set()
     for meeting in meetings_desc:
         if len(booked_users.intersection(meeting)) > 0:
-            print('{} had {} double booked'.format(meeting, booked_users.intersection(meeting)))
             continue
         # no double booked users! we can use this meeting
         booked_users.update(meeting)
-        print('new booked users', booked_users)
         picked_meetings.append(meeting)
     return (picked_meetings, len(booked_users))
 
 @pytest.mark.parametrize('input, expected', [
- ([[0,1],[0],[1]], ([[0, 1]], 2)),
- ([[0,1,2],[2,3]], ([[0,1,2]], 3)),
+ (
+    [[0,1],[0],[1]], 
+    ([[0, 1]], 2)
+ ),
+ (
+    [[0,1,2],[2,3]], 
+    ([[0,1,2]], 3)
+ ),
  (
     [[4,10],[3,4,12],[0,8,9,10,13],[1,5,7],[2,6],[9,4,10,11,12],[11,13]], 
     ([[0, 8, 9, 10, 13], [3, 4, 12], [1, 5, 7], [2, 6]], 13)
@@ -101,11 +107,7 @@ def event_packer(meetings: [list]):
  ),
 ])
 def test_event_packing(input, expected):
-    # check my copy pasta
-    assert all([isinstance(s, list) for s in expected[0]]) and isinstance(expected[1], int), 'expected solution not right format'
-
     actual = event_packer(input)
     assert actual[1] == expected[1], '{} neq expected \n{}'.format(actual, expected)
     assert actual[0] == expected[0], '{} neq expected \n{}'.format(actual, expected)
     
-
